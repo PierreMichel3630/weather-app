@@ -4,9 +4,11 @@ import { media, style } from "typestyle";
 import { Forecast } from "../model/Forecast";
 import { UniteContext } from "../page/Home";
 import { CardWeather } from "./Card";
+import { Skeleton } from "./Loading";
 
 interface Props {
-  forecast: Forecast;
+  forecast?: Forecast;
+  isLoading: boolean;
 }
 
 const gridContainer = style(
@@ -18,7 +20,7 @@ const gridContainer = style(
   media(
     { minWidth: 0, maxWidth: 800 },
     {
-      gridTemplateColumns: "repeat(2,1fr)",
+      gridTemplateColumns: "repeat(3,1fr)",
     }
   ),
   media(
@@ -30,21 +32,29 @@ const gridContainer = style(
   media(
     { minWidth: 1000 },
     {
-      gridTemplateColumns: "repeat(5,1fr)",
+      gridTemplateColumns: "repeat(3,1fr)",
     }
   )
 );
 
-export const ForecastComponent = ({ forecast }: Props) => {
+export const ForecastComponent = ({ forecast, isLoading }: Props) => {
   const { unite } = useContext(UniteContext);
 
   return (
     <div className={gridContainer}>
-      {forecast.forecast.forecastday.map((day) => (
-        <Fragment key={day.date_epoch}>
-          <CardWeather weather={day} unite={unite} />
-        </Fragment>
-      ))}
+      {isLoading || forecast === undefined ? (
+        <>
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </>
+      ) : (
+        forecast.forecast.forecastday.map((day) => (
+          <Fragment key={day.date_epoch}>
+            <CardWeather weather={day} unite={unite} />
+          </Fragment>
+        ))
+      )}
     </div>
   );
 };

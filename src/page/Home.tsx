@@ -1,5 +1,5 @@
 import { margin, percent, px } from "csx";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { media, style } from "typestyle";
 import { getCurrentWeather, getForecastWeather } from "../api/weather";
 import { CurrentWeatherComponent } from "../component/CurrentWeather";
@@ -63,7 +63,7 @@ const Angers: Location = {
 };
 
 export const Home = () => {
-  const NUMBER_DAY_OF_FORECAST = 5;
+  const NUMBER_DAY_OF_FORECAST = 3;
   const [location, setLocation] = useState<Location>(Angers);
   const [unite, setUnite] = useState<Temperature>(Temperature.DEGREE);
 
@@ -105,10 +105,14 @@ export const Home = () => {
                 unite={unite}
                 change={(value) => setUnite(value)}
               />
-              {forecast && <ForecastComponent forecast={forecast} />}
-              {currentWeather && (
-                <TodayHighlights currentWeather={currentWeather} />
-              )}
+              <ForecastComponent
+                forecast={forecast}
+                isLoading={loadingForecast}
+              />
+              <TodayHighlights
+                currentWeather={currentWeather}
+                isLoading={loadingCurrent}
+              />
             </div>
           </div>
         </div>
