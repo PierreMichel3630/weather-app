@@ -108,7 +108,7 @@ export const SearchLocationBar = ({ value, setValue }: Props) => {
               className={liCss}
               onClick={() => {
                 setValue(el);
-                setSearch(`${el.name} (${el.region} - ${el.country})`);
+                setSearch("");
                 setOpen(false);
               }}
             >{`${el.name} (${el.region} - ${el.country})`}</li>

@@ -5,6 +5,7 @@ import { textWhite1 } from "../style/designSystem";
 import { PercentBar } from "./Bar";
 import { CardHighlight } from "./Card";
 import { Wind } from "./Wind";
+import { Skeleton } from "./Loading";
 
 const body = style({
   marginTop: px(50),
@@ -29,39 +30,51 @@ const gridContainer = style(
   )
 );
 interface Props {
-  currentWeather: CurrentWeather;
+  currentWeather?: CurrentWeather;
+  isLoading: boolean;
 }
-export const TodayHighlights = ({ currentWeather }: Props) => (
+export const TodayHighlights = ({ currentWeather, isLoading }: Props) => (
   <div className={body}>
     <h1 className={textWhite1}>Today's HighLights</h1>
     <div className={gridContainer}>
-      <CardHighlight
-        title="Wind status"
-        value={currentWeather.current.wind_kph}
-        unite="km/h"
-        extra={
-          <Wind
-            wind_degree={currentWeather.current.wind_degree}
-            wind_dir={currentWeather.current.wind_dir}
+      {isLoading || currentWeather === undefined ? (
+        <>
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </>
+      ) : (
+        <>
+          <CardHighlight
+            title="Wind status"
+            value={currentWeather.current.wind_kph}
+            unite="km/h"
+            extra={
+              <Wind
+                wind_degree={currentWeather.current.wind_degree}
+                wind_dir={currentWeather.current.wind_dir}
+              />
+            }
           />
-        }
-      />
-      <CardHighlight
-        title="Humidity"
-        value={currentWeather.current.humidity}
-        unite="%"
-        extra={<PercentBar value={currentWeather.current.humidity} />}
-      />
-      <CardHighlight
-        title="Visibility"
-        value={currentWeather.current.vis_km}
-        unite="km"
-      />
-      <CardHighlight
-        title="Air Pressure"
-        value={currentWeather.current.pressure_mb}
-        unite="mb"
-      />
+          <CardHighlight
+            title="Humidity"
+            value={currentWeather.current.humidity}
+            unite="%"
+            extra={<PercentBar value={currentWeather.current.humidity} />}
+          />
+          <CardHighlight
+            title="Visibility"
+            value={currentWeather.current.vis_km}
+            unite="km"
+          />
+          <CardHighlight
+            title="Air Pressure"
+            value={currentWeather.current.pressure_mb}
+            unite="mb"
+          />
+        </>
+      )}
     </div>
   </div>
 );
